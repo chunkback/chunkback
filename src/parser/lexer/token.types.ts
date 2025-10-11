@@ -2,10 +2,13 @@
  * CBPL (Chunkback Prompt Language) Token Types
  *
  * Defines all token types that can appear in CBPL code.
+ * Keywords are auto-generated from cbpl.definitions.json
  */
 
+import { COMMAND_NAMES } from '../definitions/cbpl.generated';
+
 export enum TokenType {
-  // Keywords
+  // Keywords - generated from CBPL definitions
   SAY = 'SAY',
   TOOLCALL = 'TOOLCALL',
   CHUNKSIZE = 'CHUNKSIZE',
@@ -29,11 +32,12 @@ export interface Token {
 }
 
 /**
- * Keywords map for quick lookup
+ * Keywords map for quick lookup - generated from CBPL definitions
  */
-export const KEYWORDS: Record<string, TokenType> = {
-  SAY: TokenType.SAY,
-  TOOLCALL: TokenType.TOOLCALL,
-  CHUNKSIZE: TokenType.CHUNKSIZE,
-  CHUNKLATENCY: TokenType.CHUNKLATENCY,
-};
+export const KEYWORDS: Record<string, TokenType> = COMMAND_NAMES.reduce(
+  (acc, name) => {
+    acc[name] = TokenType[name];
+    return acc;
+  },
+  {} as Record<string, TokenType>
+);
