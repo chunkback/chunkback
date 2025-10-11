@@ -47,7 +47,7 @@ export class CBPLParser {
             commands.push({
               command: statement,
               chunkSize: currentChunkSize,
-              chunkLatency: currentChunkLatency
+              chunkLatency: currentChunkLatency,
             });
             break;
 
@@ -104,7 +104,7 @@ export class CBPLParser {
 
     return {
       type: 'SAY',
-      content: content.value as string
+      content: content.value as string,
     };
   }
 
@@ -119,7 +119,7 @@ export class CBPLParser {
     return {
       type: 'TOOLCALL',
       toolName: toolName.value as string,
-      arguments: args.value as string
+      arguments: args.value as string,
     };
   }
 
@@ -132,7 +132,7 @@ export class CBPLParser {
 
     return {
       type: 'CHUNKSIZE',
-      size: size.value as number
+      size: size.value as number,
     };
   }
 
@@ -145,7 +145,7 @@ export class CBPLParser {
 
     return {
       type: 'CHUNKLATENCY',
-      latency: latency.value as number
+      latency: latency.value as number,
     };
   }
 

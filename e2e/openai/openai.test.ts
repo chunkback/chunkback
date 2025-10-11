@@ -20,21 +20,19 @@ describe('OpenAI Endpoint E2E Tests', () => {
       const response = await fetch(`${baseUrl}/v1/chat/completions`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: 'echo-model',
-          messages: [
-            { role: 'user', content: testCase.prompt }
-          ]
-        })
+          messages: [{ role: 'user', content: testCase.prompt }],
+        }),
       });
 
       expect(response.ok).toBe(true);
       expect(response.headers.get('content-type')).toContain('text/event-stream');
 
       const text = await response.text();
-      const lines = text.split('\n').filter(line => line.startsWith('data: '));
+      const lines = text.split('\n').filter((line) => line.startsWith('data: '));
 
       // Should have at least one data line and [DONE]
       expect(lines.length).toBeGreaterThan(0);
@@ -42,8 +40,8 @@ describe('OpenAI Endpoint E2E Tests', () => {
 
       // Parse chunks
       const chunks = lines
-        .filter(line => !line.includes('[DONE]'))
-        .map(line => {
+        .filter((line) => !line.includes('[DONE]'))
+        .map((line) => {
           const jsonStr = line.replace('data: ', '');
           return JSON.parse(jsonStr);
         });
@@ -59,15 +57,12 @@ describe('OpenAI Endpoint E2E Tests', () => {
 
       // Verify content or tool call
       if (testCase.expectedContent) {
-        const fullContent = chunks
-          .map(chunk => chunk.choices[0]?.delta?.content || '')
-          .join('');
+        const fullContent = chunks.map((chunk) => chunk.choices[0]?.delta?.content || '').join('');
         expect(fullContent).toBe(testCase.expectedContent);
       }
 
       if (testCase.expectedToolName) {
-        const toolCalls = chunks
-          .flatMap(chunk => chunk.choices[0]?.delta?.tool_calls || []);
+        const toolCalls = chunks.flatMap((chunk) => chunk.choices[0]?.delta?.tool_calls || []);
         expect(toolCalls.length).toBeGreaterThan(0);
         expect(toolCalls[0].function.name).toBe(testCase.expectedToolName);
       }

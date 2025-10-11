@@ -26,12 +26,11 @@ describe('E2E Test Coverage Validator', () => {
   });
 
   it('should have individual tests for each verb', () => {
-    const individualTests = testCases.filter(tc => tc.verbs.length === 1);
-    const testedIndividually = new Set(individualTests.map(tc => tc.verbs[0]));
+    const individualTests = testCases.filter((tc) => tc.verbs.length === 1);
 
     // At least SAY, CHUNKSIZE, CHUNKLATENCY, and TOOLCALL should be tested individually
     for (const verb of ALL_VERBS) {
-      const hasIndividualTest = individualTests.some(tc => tc.verbs.includes(verb));
+      const hasIndividualTest = individualTests.some((tc) => tc.verbs.includes(verb));
       if (!hasIndividualTest) {
         console.warn(`⚠️  WARNING: ${verb} does not have an individual test case`);
       }
@@ -39,8 +38,8 @@ describe('E2E Test Coverage Validator', () => {
   });
 
   it('should have at least one combo test', () => {
-    const comboTests = testCases.filter(tc => tc.verbs.length > 2);
+    const comboTests = testCases.filter((tc) => tc.verbs.length > 2);
     expect(comboTests.length).toBeGreaterThan(0);
-    console.log('✓ Combo tests:', comboTests.map(tc => tc.name).join(', '));
+    console.log('✓ Combo tests:', comboTests.map((tc) => tc.name).join(', '));
   });
 });

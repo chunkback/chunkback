@@ -28,7 +28,7 @@ export async function streamResponse(res: Response, parsed: ParsedPrompt): Promi
       // Handle TOOLCALL
       const chunk = createChunk(null, isFirstChunk, false, {
         toolName: execCommand.command.toolName,
-        arguments: execCommand.command.arguments
+        arguments: execCommand.command.arguments,
       });
       res.write(`data: ${JSON.stringify(chunk)}\n\n`);
       isFirstChunk = false;
@@ -41,22 +41,14 @@ export async function streamResponse(res: Response, parsed: ParsedPrompt): Promi
       const chunks = chunkString(content, chunkSize);
 
       // Send first chunk
-      const firstChunk = createChunk(
-        chunks[0],
-        isFirstChunk,
-        chunks.length === 1 && isLastCommand
-      );
+      const firstChunk = createChunk(chunks[0], isFirstChunk, chunks.length === 1 && isLastCommand);
       res.write(`data: ${JSON.stringify(firstChunk)}\n\n`);
       isFirstChunk = false;
 
       // Send remaining chunks
       for (let i = 1; i < chunks.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, chunkLatency));
-        const chunk = createChunk(
-          chunks[i],
-          false,
-          i === chunks.length - 1 && isLastCommand
-        );
+        await new Promise((resolve) => setTimeout(resolve, chunkLatency));
+        const chunk = createChunk(chunks[i], false, i === chunks.length - 1 && isLastCommand);
         res.write(`data: ${JSON.stringify(chunk)}\n\n`);
       }
     }

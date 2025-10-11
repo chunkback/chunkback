@@ -13,7 +13,7 @@ describe('Lexer', () => {
         type: TokenType.SAY,
         value: 'SAY',
         line: 1,
-        column: 1
+        column: 1,
       });
       expect(tokens[1].type).toBe(TokenType.EOF);
     });
@@ -24,7 +24,7 @@ describe('Lexer', () => {
 
       expect(tokens[0]).toMatchObject({
         type: TokenType.TOOLCALL,
-        value: 'TOOLCALL'
+        value: 'TOOLCALL',
       });
     });
 
@@ -34,7 +34,7 @@ describe('Lexer', () => {
 
       expect(tokens[0]).toMatchObject({
         type: TokenType.CHUNKSIZE,
-        value: 'CHUNKSIZE'
+        value: 'CHUNKSIZE',
       });
     });
 
@@ -44,7 +44,7 @@ describe('Lexer', () => {
 
       expect(tokens[0]).toMatchObject({
         type: TokenType.CHUNKLATENCY,
-        value: 'CHUNKLATENCY'
+        value: 'CHUNKLATENCY',
       });
     });
 
@@ -69,7 +69,7 @@ describe('Lexer', () => {
         type: TokenType.STRING,
         value: 'Hello, World!',
         line: 1,
-        column: 1
+        column: 1,
       });
     });
 
@@ -79,7 +79,7 @@ describe('Lexer', () => {
 
       expect(tokens[0]).toMatchObject({
         type: TokenType.STRING,
-        value: ''
+        value: '',
       });
     });
 
@@ -142,7 +142,7 @@ describe('Lexer', () => {
         type: TokenType.NUMBER,
         value: 5,
         line: 1,
-        column: 1
+        column: 1,
       });
     });
 
@@ -152,7 +152,7 @@ describe('Lexer', () => {
 
       expect(tokens[0]).toMatchObject({
         type: TokenType.NUMBER,
-        value: 12345
+        value: 12345,
       });
     });
 
@@ -204,7 +204,7 @@ describe('Lexer', () => {
       const lexer = new Lexer('SAY\n\n\n"hello"');
       const tokens = lexer.tokenize();
 
-      const newlineTokens = tokens.filter(t => t.type === TokenType.NEWLINE);
+      const newlineTokens = tokens.filter((t) => t.type === TokenType.NEWLINE);
       expect(newlineTokens).toHaveLength(3);
     });
 
@@ -212,13 +212,13 @@ describe('Lexer', () => {
       const lexer = new Lexer('SAY  \t  "hello"  \t\n  CHUNKSIZE   5');
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
+      expect(tokens.map((t) => t.type)).toEqual([
         TokenType.SAY,
         TokenType.STRING,
         TokenType.NEWLINE,
         TokenType.CHUNKSIZE,
         TokenType.NUMBER,
-        TokenType.EOF
+        TokenType.EOF,
       ]);
     });
   });
@@ -239,8 +239,8 @@ describe('Lexer', () => {
       const lexer = new Lexer('SAY "hello" 123');
       const tokens = lexer.tokenize();
 
-      expect(tokens[0].column).toBe(1);  // SAY starts at column 1
-      expect(tokens[1].column).toBe(5);  // "hello" starts at column 5
+      expect(tokens[0].column).toBe(1); // SAY starts at column 1
+      expect(tokens[1].column).toBe(5); // "hello" starts at column 5
       expect(tokens[2].column).toBe(13); // 123 starts at column 13
     });
 
@@ -248,8 +248,8 @@ describe('Lexer', () => {
       const lexer = new Lexer('SAY\n  CHUNKSIZE');
       const tokens = lexer.tokenize();
 
-      expect(tokens[0].column).toBe(1);  // SAY at column 1
-      expect(tokens[2].column).toBe(3);  // CHUNKSIZE at column 3 (after 2 spaces)
+      expect(tokens[0].column).toBe(1); // SAY at column 1
+      expect(tokens[2].column).toBe(3); // CHUNKSIZE at column 3 (after 2 spaces)
     });
   });
 
@@ -258,11 +258,7 @@ describe('Lexer', () => {
       const lexer = new Lexer('SAY "Hello, World!"');
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
-        TokenType.SAY,
-        TokenType.STRING,
-        TokenType.EOF
-      ]);
+      expect(tokens.map((t) => t.type)).toEqual([TokenType.SAY, TokenType.STRING, TokenType.EOF]);
       expect(tokens[1].value).toBe('Hello, World!');
     });
 
@@ -270,11 +266,11 @@ describe('Lexer', () => {
       const lexer = new Lexer('TOOLCALL "get_weather" "San Francisco"');
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
+      expect(tokens.map((t) => t.type)).toEqual([
         TokenType.TOOLCALL,
         TokenType.STRING,
         TokenType.STRING,
-        TokenType.EOF
+        TokenType.EOF,
       ]);
       expect(tokens[1].value).toBe('get_weather');
       expect(tokens[2].value).toBe('San Francisco');
@@ -284,10 +280,10 @@ describe('Lexer', () => {
       const lexer = new Lexer('CHUNKSIZE 10');
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
+      expect(tokens.map((t) => t.type)).toEqual([
         TokenType.CHUNKSIZE,
         TokenType.NUMBER,
-        TokenType.EOF
+        TokenType.EOF,
       ]);
       expect(tokens[1].value).toBe(10);
     });
@@ -296,10 +292,10 @@ describe('Lexer', () => {
       const lexer = new Lexer('CHUNKLATENCY 50');
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
+      expect(tokens.map((t) => t.type)).toEqual([
         TokenType.CHUNKLATENCY,
         TokenType.NUMBER,
-        TokenType.EOF
+        TokenType.EOF,
       ]);
       expect(tokens[1].value).toBe(50);
     });
@@ -312,7 +308,7 @@ SAY "Second"`;
       const lexer = new Lexer(input);
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
+      expect(tokens.map((t) => t.type)).toEqual([
         TokenType.SAY,
         TokenType.STRING,
         TokenType.NEWLINE,
@@ -321,7 +317,7 @@ SAY "Second"`;
         TokenType.NEWLINE,
         TokenType.SAY,
         TokenType.STRING,
-        TokenType.EOF
+        TokenType.EOF,
       ]);
     });
 
@@ -329,14 +325,14 @@ SAY "Second"`;
       const lexer = new Lexer('SAY "Hello" CHUNKSIZE 10 SAY "World"');
       const tokens = lexer.tokenize();
 
-      expect(tokens.map(t => t.type)).toEqual([
+      expect(tokens.map((t) => t.type)).toEqual([
         TokenType.SAY,
         TokenType.STRING,
         TokenType.CHUNKSIZE,
         TokenType.NUMBER,
         TokenType.SAY,
         TokenType.STRING,
-        TokenType.EOF
+        TokenType.EOF,
       ]);
     });
   });
@@ -354,7 +350,7 @@ SAY "Second"`;
       const lexer = new Lexer('   \t  \n  ');
       const tokens = lexer.tokenize();
 
-      expect(tokens.some(t => t.type === TokenType.NEWLINE)).toBe(true);
+      expect(tokens.some((t) => t.type === TokenType.NEWLINE)).toBe(true);
       expect(tokens[tokens.length - 1].type).toBe(TokenType.EOF);
     });
 
@@ -397,9 +393,9 @@ SAY "Complete!"`;
 
       // Verify structure without checking exact token count
       expect(tokens[0].type).toBe(TokenType.SAY);
-      expect(tokens.find(t => t.type === TokenType.CHUNKSIZE)).toBeDefined();
-      expect(tokens.find(t => t.type === TokenType.CHUNKLATENCY)).toBeDefined();
-      expect(tokens.find(t => t.type === TokenType.TOOLCALL)).toBeDefined();
+      expect(tokens.find((t) => t.type === TokenType.CHUNKSIZE)).toBeDefined();
+      expect(tokens.find((t) => t.type === TokenType.CHUNKLATENCY)).toBeDefined();
+      expect(tokens.find((t) => t.type === TokenType.TOOLCALL)).toBeDefined();
       expect(tokens[tokens.length - 1].type).toBe(TokenType.EOF);
     });
 

@@ -95,7 +95,11 @@ export class Lexer {
    * Skip whitespace characters (except newlines)
    */
   private skipWhitespace(): void {
-    while (this.currentChar !== null && this.isWhitespace(this.currentChar) && this.currentChar !== '\n') {
+    while (
+      this.currentChar !== null &&
+      this.isWhitespace(this.currentChar) &&
+      this.currentChar !== '\n'
+    ) {
       this.advance();
     }
   }
@@ -144,7 +148,7 @@ export class Lexer {
       type: TokenType.STRING,
       value,
       line: startLine,
-      column: startColumn
+      column: startColumn,
     };
   }
 
@@ -165,7 +169,7 @@ export class Lexer {
       type: TokenType.NUMBER,
       value: parseInt(value, 10),
       line: startLine,
-      column: startColumn
+      column: startColumn,
     };
   }
 
@@ -190,7 +194,7 @@ export class Lexer {
       type: tokenType,
       value: keyword,
       line: startLine,
-      column: startColumn
+      column: startColumn,
     };
   }
 
@@ -202,7 +206,7 @@ export class Lexer {
       type,
       value,
       line: this.line,
-      column: this.column
+      column: this.column,
     };
   }
 

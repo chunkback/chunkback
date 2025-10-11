@@ -14,7 +14,7 @@ export async function chatCompletions(req: Request, res: Response): Promise<void
     }
 
     // Get the last user message as the prompt
-    const userMessages = body.messages.filter(msg => msg.role === 'user');
+    const userMessages = body.messages.filter((msg) => msg.role === 'user');
     if (userMessages.length === 0) {
       res.status(400).json({ error: 'At least one user message is required' });
       return;

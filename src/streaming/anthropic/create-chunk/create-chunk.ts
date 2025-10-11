@@ -22,9 +22,9 @@ export function createAnthropicChunk(
         stop_sequence: null,
         usage: {
           input_tokens: 0,
-          output_tokens: 0
-        }
-      }
+          output_tokens: 0,
+        },
+      },
     });
 
     // Content block start
@@ -36,12 +36,12 @@ export function createAnthropicChunk(
             type: 'tool_use',
             id: `toolu_${Date.now()}`,
             name: toolCall.toolName,
-            input: {}
+            input: {},
           }
         : {
             type: 'text',
-            text: ''
-          }
+            text: '',
+          },
     });
   }
 
@@ -52,8 +52,8 @@ export function createAnthropicChunk(
       index: 0,
       delta: {
         type: 'text_delta',
-        text: content
-      }
+        text: content,
+      },
     });
   }
 
@@ -63,8 +63,8 @@ export function createAnthropicChunk(
       index: 0,
       delta: {
         type: 'tool_use',
-        input: toolCall.arguments
-      }
+        input: toolCall.arguments,
+      },
     });
   }
 
@@ -72,12 +72,12 @@ export function createAnthropicChunk(
     // Content block stop
     chunks.push({
       type: 'content_block_stop',
-      index: 0
+      index: 0,
     });
 
     // Message stop
     chunks.push({
-      type: 'message_stop'
+      type: 'message_stop',
     });
   }
 

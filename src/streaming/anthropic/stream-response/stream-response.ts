@@ -30,7 +30,9 @@ export async function streamAnthropicResponse(res: Response, parsed: ParsedPromp
     if (execCommand.command.type === 'TOOLCALL') {
       // If we were in a text block, close it first
       if (currentBlockType === 'text') {
-        res.write(`event: content_block_stop\ndata: ${JSON.stringify({ type: 'content_block_stop', index: contentBlockIndex })}\n\n`);
+        res.write(
+          `event: content_block_stop\ndata: ${JSON.stringify({ type: 'content_block_stop', index: contentBlockIndex })}\n\n`
+        );
         contentBlockIndex++;
       }
 
@@ -38,12 +40,16 @@ export async function streamAnthropicResponse(res: Response, parsed: ParsedPromp
       const needsBlockStart = isFirstChunk || currentBlockType === 'text';
       const chunks = createAnthropicChunk(null, needsBlockStart, isLastCommand, {
         toolName: execCommand.command.toolName,
-        arguments: execCommand.command.arguments
+        arguments: execCommand.command.arguments,
       });
 
       // Update indices for tool block
       for (const chunk of chunks) {
-        if (chunk.type === 'content_block_start' || chunk.type === 'content_block_delta' || chunk.type === 'content_block_stop') {
+        if (
+          chunk.type === 'content_block_start' ||
+          chunk.type === 'content_block_delta' ||
+          chunk.type === 'content_block_stop'
+        ) {
           chunk.index = contentBlockIndex;
         }
         res.write(`event: ${chunk.type}\ndata: ${JSON.stringify(chunk)}\n\n`);
@@ -77,7 +83,11 @@ export async function streamAnthropicResponse(res: Response, parsed: ParsedPromp
 
       // Update indices
       for (const chunk of firstChunks) {
-        if (chunk.type === 'content_block_start' || chunk.type === 'content_block_delta' || chunk.type === 'content_block_stop') {
+        if (
+          chunk.type === 'content_block_start' ||
+          chunk.type === 'content_block_delta' ||
+          chunk.type === 'content_block_stop'
+        ) {
           chunk.index = contentBlockIndex;
         }
         res.write(`event: ${chunk.type}\ndata: ${JSON.stringify(chunk)}\n\n`);
@@ -88,7 +98,7 @@ export async function streamAnthropicResponse(res: Response, parsed: ParsedPromp
 
       // Send remaining chunks
       for (let i = 1; i < textChunks.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, chunkLatency));
+        await new Promise((resolve) => setTimeout(resolve, chunkLatency));
         const chunks = createAnthropicChunk(
           textChunks[i],
           false,

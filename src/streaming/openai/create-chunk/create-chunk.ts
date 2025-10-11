@@ -15,9 +15,9 @@ export function createChunk(
       {
         index: 0,
         delta: {},
-        finish_reason: isLast ? 'stop' : null
-      }
-    ]
+        finish_reason: isLast ? 'stop' : null,
+      },
+    ],
   };
 
   if (isFirst && !toolCall) {
@@ -36,9 +36,9 @@ export function createChunk(
         type: 'function',
         function: {
           name: toolCall.toolName,
-          arguments: toolCall.arguments
-        }
-      }
+          arguments: toolCall.arguments,
+        },
+      },
     ];
     chunk.choices[0].finish_reason = 'tool_calls';
   }

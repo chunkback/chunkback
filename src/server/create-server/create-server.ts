@@ -22,7 +22,7 @@ export function createServer(options?: ServerOptions): Express {
 
   // Apply custom middleware if provided
   if (options?.middleware) {
-    options.middleware.forEach(mw => app.use(mw));
+    options.middleware.forEach((mw) => app.use(mw));
   }
 
   // Routes

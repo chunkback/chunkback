@@ -11,6 +11,7 @@ CBPL uses a proper lexer/parser architecture similar to SQL parsers:
 3. **Executor** (`src/streaming/`): Executes the AST to generate streaming responses
 
 This architecture provides:
+
 - Better error messages with line/column information
 - Easier language extension
 - More robust parsing than regex matching
@@ -19,6 +20,7 @@ This architecture provides:
 ## Language Syntax
 
 ### SAY Statement
+
 Outputs text content as a streaming response.
 
 ```cbpl
@@ -26,11 +28,13 @@ SAY "Hello, World!"
 ```
 
 **Syntax:**
+
 ```
 SAY <string>
 ```
 
 ### TOOLCALL Statement
+
 Invokes a tool/function with specified arguments.
 
 ```cbpl
@@ -38,11 +42,13 @@ TOOLCALL "get_weather" "San Francisco, CA"
 ```
 
 **Syntax:**
+
 ```
 TOOLCALL <tool_name> <arguments>
 ```
 
 ### CHUNKSIZE Statement
+
 Sets the chunk size for subsequent SAY statements (how many characters per chunk).
 
 ```cbpl
@@ -51,11 +57,13 @@ SAY "Hello, World!"
 ```
 
 **Syntax:**
+
 ```
 CHUNKSIZE <number>
 ```
 
 ### CHUNKLATENCY Statement
+
 Sets the delay in milliseconds between chunks for subsequent SAY statements.
 
 ```cbpl
@@ -64,6 +72,7 @@ SAY "Hello, World!"
 ```
 
 **Syntax:**
+
 ```
 CHUNKLATENCY <number>
 ```
@@ -119,16 +128,19 @@ SAY "10 chars per chunk, still 100ms delay"
 ## Examples
 
 ### Basic SAY
+
 ```cbpl
 SAY "Hello, World!"
 ```
 
 ### Tool Call
+
 ```cbpl
 TOOLCALL "search_web" "latest AI news"
 ```
 
 ### Custom Chunking
+
 ```cbpl
 CHUNKSIZE 10
 CHUNKLATENCY 50
@@ -136,6 +148,7 @@ SAY "This will stream 10 characters at a time with 50ms delay between chunks"
 ```
 
 ### Multiple Commands
+
 ```cbpl
 SAY "Starting task..."
 TOOLCALL "fetch_data" "users"
@@ -143,6 +156,7 @@ SAY "Task complete!"
 ```
 
 ### Complex Program
+
 ```cbpl
 SAY "Analyzing your request..."
 CHUNKSIZE 5
@@ -161,6 +175,7 @@ Parse error at line 2, column 5: Expected string after SAY
 ```
 
 Common errors:
+
 - Missing quotes around strings
 - Invalid keywords
 - Missing arguments to commands
@@ -169,18 +184,21 @@ Common errors:
 ## Implementation Details
 
 ### Lexer
+
 - Character-by-character scanning
 - Line and column tracking for error messages
 - Whitespace handling (preserves newlines, skips spaces/tabs)
 - String escape sequence support
 
 ### Parser
+
 - Recursive descent parsing
 - Token stream consumption
 - AST generation
 - Error recovery
 
 ### Type System
+
 See `src/parser/types/command.types.ts` for TypeScript type definitions of the AST nodes.
 
 ## Future Extensions

@@ -10,11 +10,11 @@ export function createGeminiChunk(
       {
         content: {
           parts: [],
-          role: 'model'
+          role: 'model',
         },
-        index: 0
-      }
-    ]
+        index: 0,
+      },
+    ],
   };
 
   if (toolCall) {
@@ -29,12 +29,12 @@ export function createGeminiChunk(
     chunk.candidates[0].content.parts.push({
       functionCall: {
         name: toolCall.toolName,
-        args
-      }
+        args,
+      },
     });
   } else if (content !== null) {
     chunk.candidates[0].content.parts.push({
-      text: content
+      text: content,
     });
   }
 

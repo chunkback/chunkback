@@ -25,7 +25,7 @@ export async function streamGeminiResponse(res: Response, parsed: ParsedPrompt):
       // Handle TOOLCALL
       const chunk = createGeminiChunk(null, isLastCommand, {
         toolName: execCommand.command.toolName,
-        arguments: execCommand.command.arguments
+        arguments: execCommand.command.arguments,
       });
       res.write(JSON.stringify(chunk));
       if (!isLastCommand) {
@@ -42,7 +42,7 @@ export async function streamGeminiResponse(res: Response, parsed: ParsedPrompt):
       // Send chunks
       for (let i = 0; i < textChunks.length; i++) {
         if (i > 0) {
-          await new Promise(resolve => setTimeout(resolve, chunkLatency));
+          await new Promise((resolve) => setTimeout(resolve, chunkLatency));
         }
         const chunk = createGeminiChunk(
           textChunks[i],

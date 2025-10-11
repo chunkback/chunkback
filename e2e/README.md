@@ -30,6 +30,7 @@ npm test
 ## Test Coverage
 
 Each provider endpoint tests the following verbs:
+
 - **SAY** - Returns text content
 - **CHUNKSIZE** - Controls chunk size for streaming
 - **CHUNKLATENCY** - Controls delay between chunks
@@ -38,6 +39,7 @@ Each provider endpoint tests the following verbs:
 ### Coverage Validation
 
 The test suite includes a coverage validator that:
+
 1. Ensures all verbs are tested for each provider
 2. Warns if any verb is missing from test cases
 3. Validates that combo tests exist

@@ -14,16 +14,17 @@ export async function anthropicMessages(req: Request, res: Response): Promise<vo
     }
 
     // Get the last user message as the prompt
-    const userMessages = body.messages.filter(msg => msg.role === 'user');
+    const userMessages = body.messages.filter((msg) => msg.role === 'user');
     if (userMessages.length === 0) {
       res.status(400).json({ error: 'At least one user message is required' });
       return;
     }
 
     const lastMessage = userMessages[userMessages.length - 1];
-    const prompt = typeof lastMessage.content === 'string'
-      ? lastMessage.content
-      : lastMessage.content.map(c => c.text).join('\n');
+    const prompt =
+      typeof lastMessage.content === 'string'
+        ? lastMessage.content
+        : lastMessage.content.map((c) => c.text).join('\n');
 
     // Parse the prompt
     const parsed = parsePrompt(prompt);

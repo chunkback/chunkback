@@ -14,7 +14,7 @@ export async function geminiGenerate(req: Request, res: Response): Promise<void>
     }
 
     // Get the last user message as the prompt
-    const userContents = body.contents.filter(c => c.role === 'user');
+    const userContents = body.contents.filter((c) => c.role === 'user');
     if (userContents.length === 0) {
       res.status(400).json({ error: 'At least one user content is required' });
       return;
@@ -22,8 +22,8 @@ export async function geminiGenerate(req: Request, res: Response): Promise<void>
 
     const lastContent = userContents[userContents.length - 1];
     const prompt = lastContent.parts
-      .map(part => part.text || '')
-      .filter(text => text.length > 0)
+      .map((part) => part.text || '')
+      .filter((text) => text.length > 0)
       .join('\n');
 
     // Parse the prompt

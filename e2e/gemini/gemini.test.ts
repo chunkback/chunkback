@@ -20,29 +20,29 @@ describe('Gemini Endpoint E2E Tests', () => {
       const response = await fetch(`${baseUrl}/v1/models/echo-model/generateContent`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           contents: [
             {
               role: 'user',
-              parts: [{ text: testCase.prompt }]
-            }
-          ]
-        })
+              parts: [{ text: testCase.prompt }],
+            },
+          ],
+        }),
       });
 
       expect(response.ok).toBe(true);
       expect(response.headers.get('content-type')).toContain('application/json');
 
       const text = await response.text();
-      const lines = text.split('\n').filter(line => line.trim().length > 0);
+      const lines = text.split('\n').filter((line) => line.trim().length > 0);
 
       // Should have at least one line
       expect(lines.length).toBeGreaterThan(0);
 
       // Parse chunks
-      const chunks = lines.map(line => JSON.parse(line));
+      const chunks = lines.map((line) => JSON.parse(line));
 
       expect(chunks.length).toBeGreaterThan(0);
 
@@ -62,17 +62,17 @@ describe('Gemini Endpoint E2E Tests', () => {
       // Verify content or tool call
       if (testCase.expectedContent) {
         const textParts = chunks
-          .flatMap(chunk => chunk.candidates[0]?.content?.parts || [])
-          .filter(part => part.text)
-          .map(part => part.text);
+          .flatMap((chunk) => chunk.candidates[0]?.content?.parts || [])
+          .filter((part) => part.text)
+          .map((part) => part.text);
         const fullContent = textParts.join('');
         expect(fullContent).toBe(testCase.expectedContent);
       }
 
       if (testCase.expectedToolName) {
         const toolParts = chunks
-          .flatMap(chunk => chunk.candidates[0]?.content?.parts || [])
-          .filter(part => part.functionCall);
+          .flatMap((chunk) => chunk.candidates[0]?.content?.parts || [])
+          .filter((part) => part.functionCall);
         expect(toolParts.length).toBeGreaterThan(0);
         expect(toolParts[0].functionCall.name).toBe(testCase.expectedToolName);
       }

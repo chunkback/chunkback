@@ -1,7 +1,7 @@
 import { ALL_VERBS, CommandVerb } from './types';
 
 export function validateVerbCoverage(testedVerbs: Set<CommandVerb>, testSuiteName: string): void {
-  const missingVerbs = ALL_VERBS.filter(verb => !testedVerbs.has(verb));
+  const missingVerbs = ALL_VERBS.filter((verb) => !testedVerbs.has(verb));
 
   if (missingVerbs.length > 0) {
     console.warn(`⚠️  WARNING: ${testSuiteName} is missing tests for: ${missingVerbs.join(', ')}`);

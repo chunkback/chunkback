@@ -18,7 +18,7 @@ export enum TokenType {
   // Special
   NEWLINE = 'NEWLINE',
   EOF = 'EOF',
-  INVALID = 'INVALID'
+  INVALID = 'INVALID',
 }
 
 export interface Token {
@@ -32,8 +32,8 @@ export interface Token {
  * Keywords map for quick lookup
  */
 export const KEYWORDS: Record<string, TokenType> = {
-  'SAY': TokenType.SAY,
-  'TOOLCALL': TokenType.TOOLCALL,
-  'CHUNKSIZE': TokenType.CHUNKSIZE,
-  'CHUNKLATENCY': TokenType.CHUNKLATENCY,
+  SAY: TokenType.SAY,
+  TOOLCALL: TokenType.TOOLCALL,
+  CHUNKSIZE: TokenType.CHUNKSIZE,
+  CHUNKLATENCY: TokenType.CHUNKLATENCY,
 };

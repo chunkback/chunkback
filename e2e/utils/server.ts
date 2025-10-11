@@ -12,9 +12,11 @@ export async function startTestServer(port: number = 3001): Promise<string> {
   serverInstance = createServer();
 
   return new Promise((resolve, reject) => {
-    serverHandle = serverInstance!.listen(port, () => {
-      resolve(`http://localhost:${port}`);
-    }).on('error', reject);
+    serverHandle = serverInstance!
+      .listen(port, () => {
+        resolve(`http://localhost:${port}`);
+      })
+      .on('error', reject);
   });
 }
 
