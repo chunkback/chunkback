@@ -2,7 +2,7 @@
 
 import { createServer } from './server/create-server/create-server';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5654;
 
 // Create server without any middleware (open source version)
 const app = createServer();

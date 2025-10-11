@@ -3,7 +3,7 @@ import { createServer } from './server/create-server/create-server';
 // Re-export for external use
 export { createServer, ServerOptions } from './server/create-server/create-server';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5653;
 
 // Create server with auth middleware
 // Note: For open source version, this can be created without middleware
