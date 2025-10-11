@@ -100,29 +100,7 @@ jobs:
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }}"
           git push
 
-      - name: Create Git tag
-        run: |
-          git tag -a "v${{ env.NEW_VERSION }}" -m "Release v${{ env.NEW_VERSION }}"
-          git push origin "v${{ env.NEW_VERSION }}"
-
       - name: Publish to NPM
         run: pnpm publish --no-git-checks --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create GitHub Release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const version = process.env.NEW_VERSION;
-            const { data: release } = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `v${version}`,
-              name: `v${version}`,
-              body: `Release v${version}`,
-              draft: false,
-              prerelease: false,
-              generate_release_notes: true
-            });
-            console.log(`Created release: ${release.html_url}`);
