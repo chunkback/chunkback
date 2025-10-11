@@ -1,4 +1,8 @@
-name: Publish to NPM
+name: Manual Publish to NPM
+
+# NOTE: This workflow is for manual publishing from existing releases.
+# For automatic version bumping and publishing on merge to main,
+# use the "Auto Version & Publish" workflow instead.
 
 on:
   release:
