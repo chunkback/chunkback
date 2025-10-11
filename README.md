@@ -4,6 +4,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-22+-green.svg)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/4shub/chunkback/auto-version-publish.yml)
+![NPM Version](https://img.shields.io/npm/v/chunkback?color=blue)
+
 
 **ChunkBack lets you test your application code with popular LLM model-like apis and response bodies.**
 
