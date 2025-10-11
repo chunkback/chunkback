@@ -22,7 +22,7 @@ Thank you for your interest in contributing to Chunkback! This document provides
 Before you begin, ensure you have the following installed:
 
 - **Node.js** (v22 or higher) - [Download](https://nodejs.org/)
-- **pnpm** (v8 or higher) - Install with `npm install -g pnpm`
+- **pnpm** (v10 or higher) - Install with `npm install -g pnpm`
 - **Git** - [Download](https://git-scm.com/)
 - **A code editor**
 
