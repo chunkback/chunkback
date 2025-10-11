@@ -5,9 +5,6 @@ export default defineConfig({
     include: ['e2e/**/*.test.ts'],
     globals: true,
     testTimeout: 30000,
-    hookTimeout: 30000,
-    env: {
-      BYPASS_AUTH: 'true'
-    }
+    hookTimeout: 30000
   },
 });
