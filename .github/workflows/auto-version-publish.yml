@@ -124,11 +124,13 @@ jobs:
           git push origin "v${{ steps.version.version }}"
 
       - name: Publish to NPM
+        if: steps.version_type.outputs.bump == 'minor'
         run: pnpm publish --no-git-checks --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
+        if: steps.version_type.outputs.bump == 'minor'
         uses: actions/github-script@v7
         with:
           script: |
@@ -143,3 +145,10 @@ jobs:
               generate_release_notes: true
             });
             console.log(`Created release: ${release.html_url}`);
+
+      - name: Skip publish notification
+        if: steps.version_type.outputs.bump != 'minor'
+        run: |
+          echo "⏭️ Skipping publish - only minor versions are published to NPM"
+          echo "Version bumped: ${{ steps.version_type.outputs.bump }}"
+          echo "New version: ${{ steps.version.version }}"
