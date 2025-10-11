@@ -38,12 +38,7 @@ curl -X POST http://localhost:5654/v1/chat/completions \
 
 ## Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
-
-- How to set up your development environment
-- How to add new CBPL commands
-- Code style guidelines
-- Testing requirements
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
 
 ## License
 
