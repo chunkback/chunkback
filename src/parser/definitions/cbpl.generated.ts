@@ -12,12 +12,18 @@ import definitions from '../../../cbpl.definitions.json';
 /**
  * Command names
  */
-export type CBPLCommandName = 'SAY' | 'TOOLCALL' | 'CHUNKSIZE' | 'CHUNKLATENCY';
+export type CBPLCommandName = 'SAY' | 'TOOLCALL' | 'CHUNKSIZE' | 'CHUNKLATENCY' | 'RANDOMLATENCY';
 
 /**
  * All command names
  */
-export const COMMAND_NAMES: CBPLCommandName[] = ['SAY', 'TOOLCALL', 'CHUNKSIZE', 'CHUNKLATENCY'];
+export const COMMAND_NAMES: CBPLCommandName[] = [
+  'SAY',
+  'TOOLCALL',
+  'CHUNKSIZE',
+  'CHUNKLATENCY',
+  'RANDOMLATENCY'
+];
 
 /**
  * Outputs text content as a streaming response
@@ -53,9 +59,18 @@ export interface CHUNKLATENCYCommand {
 }
 
 /**
+ * Sets a random delay in milliseconds between chunks
+ */
+export interface RANDOMLATENCYCommand {
+  type: 'RANDOMLATENCY';
+  minLatency: number;
+  maxLatency: number;
+}
+
+/**
  * All command types
  */
-export type Command = SAYCommand | TOOLCALLCommand | CHUNKSIZECommand | CHUNKLATENCYCommand;
+export type Command = SAYCommand | TOOLCALLCommand | CHUNKSIZECommand | CHUNKLATENCYCommand | RANDOMLATENCYCommand;
 
 /**
  * Zod validation schemas
@@ -73,6 +88,10 @@ export const CBPL_SCHEMAS = {
   },
   CHUNKLATENCY: {
     latency: z.number().int().nonnegative().max(10000),
+  },
+  RANDOMLATENCY: {
+    minLatency: z.number().int().nonnegative().max(10000),
+    maxLatency: z.number().int().nonnegative().max(10000),
   },
 } as const;
 

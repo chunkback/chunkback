@@ -36,7 +36,16 @@ export async function streamResponse(res: Response, parsed: ParsedPrompt): Promi
       // Handle SAY with optional CHUNKSIZE and CHUNKLATENCY
       const content = execCommand.command.content;
       const chunkSize = execCommand.chunkSize || content.length;
-      const chunkLatency = execCommand.chunkLatency || 10;
+      const randomLatency = execCommand.randomLatency;
+
+
+      let chunkLatency =  execCommand.chunkLatency || 10;
+
+      if (randomLatency && !execCommand.chunkLatency) {
+        const [min, max] = randomLatency;
+
+        chunkLatency = Math.floor(Math.random() * (max - min + 1)) + min;
+      }
 
       const chunks = chunkString(content, chunkSize);
 

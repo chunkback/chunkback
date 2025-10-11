@@ -57,6 +57,7 @@ export interface ExecutableCommand {
   command: SayCommand | ToolCallCommand;
   chunkSize?: number;
   chunkLatency?: number;
+  randomLatency?: [number, number];
 }
 
 /**

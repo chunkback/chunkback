@@ -67,7 +67,16 @@ export async function streamAnthropicResponse(res: Response, parsed: ParsedPromp
       // Handle SAY with optional CHUNKSIZE and CHUNKLATENCY
       const content = execCommand.command.content;
       const chunkSize = execCommand.chunkSize || content.length;
-      const chunkLatency = execCommand.chunkLatency || 10;
+      const randomLatency = execCommand.randomLatency;
+
+
+      let chunkLatency =  execCommand.chunkLatency || 10;
+
+      if (randomLatency && !execCommand.chunkLatency) {
+        const [min, max] = randomLatency;
+
+        chunkLatency = Math.floor(Math.random() * (max - min + 1)) + min;
+      }
 
       const textChunks = chunkString(content, chunkSize);
 

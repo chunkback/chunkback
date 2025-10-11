@@ -7,7 +7,7 @@
 
 import { Token, TokenType } from '../lexer/token.types';
 import { Lexer } from '../lexer/lexer';
-import { ParsedPrompt, ExecutableCommand, Command } from '../types/command.types';
+import { Command, ExecutableCommand, ParsedPrompt } from '../types/command.types';
 
 export class CBPLParser {
   private tokens: Token[];
@@ -24,6 +24,7 @@ export class CBPLParser {
     const commands: ExecutableCommand[] = [];
     let currentChunkSize: number | undefined;
     let currentChunkLatency: number | undefined;
+    let randomLatency: [ number, number] | undefined;
 
     while (!this.isAtEnd()) {
       // Skip newlines
@@ -48,6 +49,7 @@ export class CBPLParser {
               command: statement,
               chunkSize: currentChunkSize,
               chunkLatency: currentChunkLatency,
+              randomLatency: randomLatency,
             });
             break;
 
@@ -57,6 +59,9 @@ export class CBPLParser {
 
           case 'CHUNKLATENCY':
             currentChunkLatency = statement.latency;
+            break;
+          case 'RANDOMLATENCY':
+            randomLatency = [statement.minLatency, statement.maxLatency];
             break;
         }
       }
@@ -84,6 +89,10 @@ export class CBPLParser {
 
     if (this.check(TokenType.CHUNKSIZE)) {
       return this.parseChunkSizeStatement();
+    }
+
+    if (this.check(TokenType.RANDOMLATENCY)) {
+      return this.parseRandomLatencyStatement();
     }
 
     if (this.check(TokenType.CHUNKLATENCY)) {
@@ -146,6 +155,20 @@ export class CBPLParser {
     return {
       type: 'CHUNKLATENCY',
       latency: latency.value as number,
+    };
+  }
+
+  /**
+   * Parse RANDOMLATENCY statement: RANDOMLATENCY number number
+   */
+  private parseRandomLatencyStatement(): Command {
+    this.consume(TokenType.RANDOMLATENCY, 'Expected RANDOMLATENCY keyword');
+    const minLatency = this.consume(TokenType.NUMBER, 'Expected minimum latency number');
+    const maxLatency = this.consume(TokenType.NUMBER, 'Expected maximum latency number');
+    return {
+      type: 'RANDOMLATENCY',
+      minLatency: minLatency.value as number,
+      maxLatency: maxLatency.value as number,
     };
   }
 

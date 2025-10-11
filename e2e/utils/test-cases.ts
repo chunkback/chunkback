@@ -20,6 +20,12 @@ export const testCases: TestCase[] = [
     expectedContent: 'Hello World',
   },
   {
+    name: 'RANDOMLATENCY command',
+    prompt: 'RANDOMLATENCY 5 10\nSAY "Hello World"',
+    verbs: ['RANDOMLATENCY', 'SAY'],
+    expectedContent: 'Hello World',
+  },
+  {
     name: 'TOOLCALL command',
     prompt: 'TOOLCALL "get_weather" "San Francisco"',
     verbs: ['TOOLCALL'],

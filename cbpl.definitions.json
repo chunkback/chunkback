@@ -70,6 +70,31 @@
         }
       ],
       "examples": ["CHUNKLATENCY 50", "CHUNKLATENCY 100", "CHUNKLATENCY 0"]
+    },
+    "RANDOMLATENCY": {
+      "name": "RANDOMLATENCY",
+      "description": "Sets a random delay in milliseconds between chunks",
+      "parameters": [
+        {
+          "name": "minLatency",
+          "type": "number",
+          "description": "Minimum delay in milliseconds between chunks (0-10000)",
+          "validation": {
+            "min": 0,
+            "max": 10000
+          }
+        },
+        {
+          "name": "maxLatency",
+          "type": "number",
+          "description": "Maximum delay in milliseconds between chunks (0-10000)",
+          "validation": {
+            "min": 0,
+            "max": 10000
+          }
+        }
+      ],
+      "examples": ["RANDOMLATENCY 50 100", "RANDOMLATENCY 100 200", "RANDOMLATENCY 0 0"]
     }
   }
 }
