@@ -37,13 +37,13 @@ export interface AnthropicStreamChunk {
     text?: string;
     id?: string;
     name?: string;
-    input?: Record<string, any>;
+    input?: Record<string, unknown>;
   };
   message?: {
     id: string;
     type: 'message';
     role: 'assistant';
-    content: Array<any>;
+    content: Array<unknown>;
     model: string;
     stop_reason: string | null;
     stop_sequence: string | null;

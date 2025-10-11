@@ -126,7 +126,7 @@ export function isValidCommand(name: string): name is CBPLCommandName {
  */
 export function validateParameters(
   commandName: CBPLCommandName,
-  params: Record<string, any>
+  params: Record<string, unknown>
 ): { success: boolean; errors?: string[] } {
   const schemas = CBPL_SCHEMAS[commandName];
   if (!schemas) {
@@ -144,7 +144,7 @@ export function validateParameters(
       continue;
     }
 
-    const schema = (schemas as any)[param.name];
+    const schema = (schemas as Record<string, z.ZodType>)[param.name];
     if (schema) {
       const result = schema.safeParse(value);
       if (!result.success) {

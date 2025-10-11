@@ -37,7 +37,7 @@ describe('Anthropic Endpoint E2E Tests', () => {
 
       // Parse SSE format: event lines followed by data lines
       const lines = text.split('\n');
-      const chunks: any[] = [];
+      const chunks: unknown[] = [];
 
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].startsWith('data: ')) {

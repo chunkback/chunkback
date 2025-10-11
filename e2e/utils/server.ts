@@ -1,8 +1,9 @@
 import { createServer } from '../../src/server/create-server/create-server';
 import type { Express } from 'express';
+import type { Server } from 'http';
 
 let serverInstance: Express | null = null;
-let serverHandle: any = null;
+let serverHandle: Server | null = null;
 
 export async function startTestServer(port: number = 3001): Promise<string> {
   if (serverInstance) {

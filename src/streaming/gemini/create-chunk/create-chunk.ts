@@ -19,9 +19,9 @@ export function createGeminiChunk(
 
   if (toolCall) {
     // Parse arguments as JSON if possible
-    let args: Record<string, any> = {};
+    let args: Record<string, unknown> = {};
     try {
-      args = JSON.parse(toolCall.arguments);
+      args = JSON.parse(toolCall.arguments) as Record<string, unknown>;
     } catch {
       args = { value: toolCall.arguments };
     }

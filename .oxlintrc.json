@@ -4,6 +4,7 @@
     "correctness": "warn",
     "suspicious": "warn",
     "perf": "warn",
+    "typescript/no-explicit-any": "error"
   },
   "ignorePatterns": [
     "**/node_modules/**",

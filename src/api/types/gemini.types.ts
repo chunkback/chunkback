@@ -2,7 +2,7 @@ export interface GeminiPart {
   text?: string;
   functionCall?: {
     name: string;
-    args: Record<string, any>;
+    args: Record<string, unknown>;
   };
 }
 
