@@ -58,8 +58,27 @@ jobs:
             exit 0
           fi
 
-          # Always use minor version bump for auto-versioning
-          echo "bump=minor" >> $GITHUB_OUTPUT
+          # Auto-detect from commit messages since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            # No tags yet, check all commits
+            COMMITS=$(git log --pretty=format:"%s")
+          else
+            # Get commits since last tag
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s")
+          fi
+
+          # Check for breaking changes or major version indicators
+          if echo "$COMMITS" | grep -iE "^(BREAKING CHANGE|feat!|fix!|chore!|refactor!):"; then
+            echo "bump=major" >> $GITHUB_OUTPUT
+          # Check for new features (minor bump)
+          elif echo "$COMMITS" | grep -iE "^feat(\(.*\))?:"; then
+            echo "bump=minor" >> $GITHUB_OUTPUT
+          # Everything else is a patch
+          else
+            echo "bump=patch" >> $GITHUB_OUTPUT
+          fi
 
       - name: Bump version
         id: version
@@ -105,11 +124,13 @@ jobs:
           git push origin "v${{ steps.version.version }}"
 
       - name: Publish to NPM
+        if: steps.version_type.outputs.bump == 'minor'
         run: pnpm publish --no-git-checks --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
+        if: steps.version_type.outputs.bump == 'minor'
         uses: actions/github-script@v7
         with:
           script: |
@@ -124,3 +145,10 @@ jobs:
               generate_release_notes: true
             });
             console.log(`Created release: ${release.html_url}`);
+
+      - name: Skip publish notification
+        if: steps.version_type.outputs.bump != 'minor'
+        run: |
+          echo "⏭️ Skipping publish - only minor versions are published to NPM"
+          echo "Version bumped: ${{ steps.version_type.outputs.bump }}"
+          echo "New version: ${{ steps.version.version }}"
