@@ -22,7 +22,6 @@ Then run in your terminal:
 ```
 curl -X POST http://localhost:5654/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer cheesers1" \
   -d '{
     "model": "swag",
     "messages": [
