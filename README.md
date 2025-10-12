@@ -1,4 +1,4 @@
-![License: MIT](/assets/chunkback-logo.svg)
+![License: MIT](/assets/chunkback-app.svg)
 # ChunkBack
 
 
