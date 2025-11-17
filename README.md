@@ -37,6 +37,10 @@ curl -X POST http://localhost:5654/v1/chat/completions \
 - **Open Source** - You can see the code right there!
 - **No extra services dependencies** - There's no DB no Redis no nothing, just server code
 
+## Hosted Version
+
+I am hosting a version of Chunkback on `api.chunkback.com` (sign up on the main site [chunkback.com](https://chunkback.com)) so you can plug it in without having to set anything up. I'm asking for 20$ a month for unlimited usage, or you can use it for free for 1000reqs/month.
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md)
