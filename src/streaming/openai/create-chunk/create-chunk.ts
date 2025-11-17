@@ -4,7 +4,7 @@ export function createChunk(
   content: string | null,
   isFirst: boolean = false,
   isLast: boolean = false,
-  toolCall?: { toolName: string; arguments: string }
+  toolCall?: { toolName: string; arguments: string; isFirstToolChunk?: boolean }
 ): StreamChunk {
   const chunk: StreamChunk = {
     id: `chatcmpl-${Date.now()}`,
@@ -20,7 +20,7 @@ export function createChunk(
     ],
   };
 
-  if (isFirst && !toolCall) {
+  if (isFirst) {
     chunk.choices[0].delta.role = 'assistant';
   }
 
@@ -29,18 +29,36 @@ export function createChunk(
   }
 
   if (toolCall) {
-    chunk.choices[0].delta.tool_calls = [
-      {
-        index: 0,
-        id: `call_${Date.now()}`,
-        type: 'function',
-        function: {
-          name: toolCall.toolName,
-          arguments: toolCall.arguments,
+    const isFirstToolChunk = toolCall.isFirstToolChunk ?? true;
+
+    if (isFirstToolChunk) {
+      // First chunk: include full tool call structure with name, id, type
+      chunk.choices[0].delta.tool_calls = [
+        {
+          index: 0,
+          id: `call_${Date.now()}`,
+          type: 'function',
+          function: {
+            name: toolCall.toolName,
+            arguments: toolCall.arguments,
+          },
         },
-      },
-    ];
-    chunk.choices[0].finish_reason = 'tool_calls';
+      ];
+    } else {
+      // Delta chunk: only include arguments
+      chunk.choices[0].delta.tool_calls = [
+        {
+          index: 0,
+          function: {
+            arguments: toolCall.arguments,
+          },
+        },
+      ];
+    }
+
+    if (isLast) {
+      chunk.choices[0].finish_reason = 'tool_calls';
+    }
   }
 
   return chunk;
