@@ -30,7 +30,7 @@ export function createChunk(
 
   if (toolCall) {
     const isFirstToolChunk = toolCall.isFirstToolChunk ?? true;
-    const callId = toolCall.callId || `call_${Date.now()}`;
+    const callId = toolCall.callId || `call_${crypto.randomUUID()}_${Date.now()}`;
 
     if (isFirstToolChunk) {
       // First chunk: include full tool call structure with name, id, type

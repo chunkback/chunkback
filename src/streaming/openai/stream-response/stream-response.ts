@@ -35,8 +35,8 @@ export async function streamResponse(res: Response, parsed: ParsedPrompt): Promi
 
       const argumentChunks = chunkString(argumentsStr, chunkSize);
 
-      // Generate call ID
-      const callId = `call_${Date.now()}`;
+      // Generate call ID (UUID + timestamp for uniqueness)
+      const callId = `call_${crypto.randomUUID()}_${Date.now()}`;
 
       // Store mocked response (always required)
       storeMockedResponse(callId, mockedResponse);

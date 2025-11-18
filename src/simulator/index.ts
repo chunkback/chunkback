@@ -35,10 +35,10 @@ function createChunk(
   isLast: boolean,
   toolCall?: {
     index: number;
-    id: string;
-    type: string;
+    id?: string;
+    type?: string;
     function: {
-      name: string;
+      name?: string;
       arguments: string;
     };
   }
@@ -56,7 +56,7 @@ function createChunk(
           ...(content !== null && { content }),
           ...(toolCall && { tool_calls: [toolCall] }),
         },
-        finish_reason: isLast ? 'stop' : null,
+        finish_reason: isLast ? (toolCall ? 'tool_calls' : 'stop') : null,
       },
     ],
   };
@@ -115,18 +115,70 @@ export async function* streamParsedPrompt(
         isFirstChunk = false;
       }
     } else if (command.type === 'TOOLCALL') {
-      const isLastChunk = parsed.commands.indexOf(executableCommand) === parsed.commands.length - 1;
+      const isLastCommand =
+        parsed.commands.indexOf(executableCommand) === parsed.commands.length - 1;
+      const argumentsStr = command.arguments;
+      const argChunks = chunkString(argumentsStr, chunkSize);
+      const callId = `call_${crypto.randomUUID()}_${Date.now()}`;
 
-      yield createChunk(null, isFirstChunk, isLastChunk, {
-        index: 0,
-        id: `call_${Math.random().toString(36).substring(2, 15)}`,
-        type: 'function',
-        function: {
-          name: command.toolName,
-          arguments: command.arguments,
-        },
-      });
-      isFirstChunk = false;
+      // Stream tool call arguments incrementally
+      for (let i = 0; i < argChunks.length; i++) {
+        const isLastChunk = i === argChunks.length - 1 && isLastCommand;
+
+        // Apply delay between chunks
+        if (i > 0 || !isFirstChunk) {
+          let delay = chunkLatency;
+          if (randomLatency) {
+            const [min, max] = randomLatency;
+            delay = Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+          if (delay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+        }
+
+        if (i === 0) {
+          // First chunk: include id, type, name, and initial arguments
+          yield createChunk(null, isFirstChunk, isLastChunk, {
+            index: 0,
+            id: callId,
+            type: 'function',
+            function: {
+              name: command.toolName,
+              arguments: argChunks[i],
+            },
+          });
+        } else {
+          // Delta chunks: only arguments
+          yield createChunk(null, false, isLastChunk, {
+            index: 0,
+            function: {
+              arguments: argChunks[i],
+            },
+          });
+        }
+        isFirstChunk = false;
+      }
+
+      // If there's a mocked response, stream it as a follow-up
+      if (command.mockedResponse) {
+        const responseChunks = chunkString(command.mockedResponse, chunkSize);
+        for (let i = 0; i < responseChunks.length; i++) {
+          const isLastChunk = i === responseChunks.length - 1 && isLastCommand;
+
+          // Apply delay
+          let delay = chunkLatency;
+          if (randomLatency) {
+            const [min, max] = randomLatency;
+            delay = Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+          if (delay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+
+          yield createChunk(responseChunks[i], i === 0, isLastChunk);
+        }
+      }
     }
   }
 }
