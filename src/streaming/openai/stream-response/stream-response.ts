@@ -40,7 +40,7 @@ export async function streamResponse(res: Response, parsed: ParsedPrompt): Promi
       const callId = `call_${nanoid(12)}`;
 
       // Store mocked response (always required)
-      storeMockedResponse(callId, mockedResponse);
+      await storeMockedResponse(callId, mockedResponse);
 
       // Send first chunk with tool name and initial arguments
       const firstToolChunk = createChunk(
